@@ -1,0 +1,433 @@
+			Linux命令行与shell脚本编程大全
+**********基本命令*************
+cd /usr/bin
+
+pwd
+
+ls  ls -l
+ls -l my_scr?pt
+ls -l my*
+ls -l f[a-i]ll
+ls -l f[!a]ll
+
+touch test_one
+
+cp test_one test_two
+cp -i test_one test_two
+cp -i test_one /home/christine/Documents/
+cp -R Scripts/ Mod_Scripts  ---递归
+man cp ---- 帮助命令
+
+mv fall fzll         ---- 重命名
+mv fzll Pictures/    ---- 移动
+mv -i fall fzll
+
+rm -i fall   --- 删除文件
+rm -i f?ll
+rm -f fall
+
+mkdir New_Dir
+mkdir -p New_Dir/Sub_Dir/Under_Dir
+rmdir New_Dir
+**** rm -i New_Dir/my_file
+**** rmdir New_Dir
+rm -rf Small_Dir   --- 强制递归删除目录
+
+file my_file  ---- 查看类型
+cat test1
+cat -n test1
+cat -b test1
+more /etc/bash.bashrc
+less
+tail log_file
+tail -n 2 log_file
+head log_file
+head -5 log_file
+
+进程：
+ps
+ps -ef  ---- 查看系统上运行的所有进程
+top     ---- 动态进程
+		---- 按照%CPU值对进程进行排序
+		---- 可用参数：f  d   q
+kill 3940
+killall http*
+
+磁盘：
+mount
+df -h
+
+sort file1
+sort -n file2   ---- 按数字进行排序
+grep three file1
+grep t file1
+grep -v t file1   --- 在file1中搜索不含有 t 的数据
+grep -n t file1   --- 显示行号
+grep -c t file1   --- 计数
+grep [tf] file1   --- 匹配正则
+
+解压缩：
+gzip myprog
+gzip my*
+gunzip hello.txt.gz
+tar -zcvf a.tar.gz /home/a1.txt /home/a2.txt
+tar -zcvf myhome.tar.gz /home/
+	
+tar -zxvf a.tar.gz
+tar -zxvf myhome.tar.gz -C /opt/
+
+cat /etc/passwd
+history
+环境变量：
+printenv  --- 全局
+env
+echo $HOME
+set  ---- 全部
+设全局环境变量：
+	my_variable="I am Global now"
+	export my_variable
+	echo $my_variable
+unset $my_variable
+
+echo $PATH --- 显示可供shell用来查找命令和程序的路径
+添加环境变量：
+PATH=$PATH:/home/christine/Scripys
+
+usermod
+passwd test
+chown dan newfile
+chgrp sharde newfile
+
+who
+df -h
+yum list installed
+yum list installed > installed_software
+
+yum list updates
+yum update package_name
+yun update
+
+lsblk -f
+
+
+//----------定时备份数据库--------------
+vim /usr/sbin/mysql_db_backup.sh
+#可执行权限
+chmod 744 /usr/sbin/mysql_db_backup.sh
+
+#------脚本内容-------
+#!/bin/bash
+
+echo "=======开始备份========="
+echo "===备份的路径是：$BACKUP/$DATETIME.tar.gz==="
+
+#主机
+HOST=localhost
+
+#用户名
+DB_USER=root
+
+#密码
+DB_PWD=root
+
+#备份数据库名
+DATABASE=atguiguDB
+
+#备份的路径
+BACKUP=/data/backup/db
+
+#当前的时间作为文件名
+DATETIME=${date +%Y_%m_%d_%H%M%S}
+
+#创建备份的路径
+[ ! -d "$BACKUP/$DATETIME" ] && mkdir -p "$BACKUP/$DATETIME"
+
+#执行备份的指令
+mysqldump -u${DB_USER} -p${DB_PWD} --host=$HOST $DATABASE | gzip > $BACKUP/$DATETIME/$DATETIME.sql.gz
+
+#打包备份文件
+cp $BACKUP
+tar -zcvf $DATETIME.tar.gz $DATETIME
+
+#删除临时目录
+rm -rf $BACKUP/$DATETIME
+
+#删除10天前的备份文件
+find $BACKUP -mtime +10 -name "*.tar.gz" -exec rm -rf {} \;
+
+echo "=======备份文件成功========"
+
+#------------脚本内容结束------------
+
+corntab -e
+00 00 * * * /usr/sbin/mysql_db_backup.sh
+//--------------------------------------
+
+#打印9*9乘法表
+
+#!/bin/bash
+
+for i in `seq 9`
+do
+	for j in `seq $i`
+	do
+		echo -n "$j*$i=$[$i*$j] "
+	done
+	echo ""
+done
+
+//-----------------------
+CentOS7:
+	ip addr
+	ifconfig
+	rm hello.java
+	clear
+	vi hello.java  i esc : esc wq q q!
+	
+	shutdown -h now   立即关机
+	shutdown -h 1     1分钟后关机
+	shutdown -r now   立即重启
+	
+	halt    关机
+	reboot  重启系统
+	sync    同步数据
+	
+	cd /  cd ~ ll
+	useradd zhangchao
+	passwd zhangchao
+	pwd
+	useradd -d /home/xq/ xq
+	passwd xq
+	mkdir tiger
+	
+	userdel xq   保留家目录
+	userdel -r xiaohong  删除用户和目录
+	
+	id root   id zhangchao
+	su - root
+	
+	groupadd dev
+	groupdel dev
+	useradd -g dev zhangchao
+	passwd zhangchao
+	
+	usermod -g dev fansan  ---将fansan修改到 dev 组
+	
+	/etc/passwd   用户user的配置文件，记录用户的各种信息
+	/etc/shadow   口令的加密文件
+	/etc/group    组的配置文件
+	
+	/etc/inittab  运行级别 常用 3 / 5
+	init 3  init 5
+	
+	man ls     帮助命令
+	help cd    帮助命令
+	
+	pwd  -- 查看当前目录
+	ls  / ls -l /  ls -a  / ls -al
+	cd ~  /  cd /  /  cd ..
+	mkdir mydir   /  mkdir -p  china/shanxi (-p 创建多级目录)
+	rmdir 删除空目录
+	rm -rf 非空目录
+	
+	touch hello.txt
+	vi hello.txt  i  ***** :qw
+	cat hello.txt
+	
+	mkdir -p /home/zhangsan/test
+	cd /home/zhangsan/test
+	cp -r /root/hello.txt /home/zhansan/test
+	
+	cat -n /etc/profile
+	more /etc/profile
+	less /etc/profile  ----查看大文件
+	
+	ls -l > /home/zhangsan/test/hello.txt
+	ls -l >> /home/zhangsan/test/hello.txt
+	
+	cal --显示日历
+	tail -n 5 /home/zhangsan/test/hello.txt
+	tail -f /home/zhangsan/test/hello.txt
+	
+	history
+	history 10
+	!178   -- 执行历史指令
+	
+	date
+	date +%Y
+	date +%m
+	date +%d
+	date "+%Y-%m-%d %H:%M:%S"
+	
+	date -s "2018-09-12 13:34:40"
+	cal
+	cal 2010
+	
+	find /home -name hello.txt   --- 按照文件名查找
+	find /home -user root        --- 按照拥有者查找
+	find /home -size +20M
+	find / -size +20M     -20M  20M
+	find /home -name *.txt
+	
+	updatedb
+	locate hello.txt
+	
+	gzip hello.txt  -- 压缩  生成 hello.txt.gz
+	gunzip hello.txt.gz 
+	
+	ls -lh
+	
+	zip -r mypackage.zip /home/
+	unzip -d /opt/tmp/ mypackage.zip
+	
+	tar -zcvf a.tar.gz /home/a1.txt /home/a2.txt
+	tar -zcvf myhome.tar.gz /home/
+	
+	tar -zxvf a.tar.gz
+	tar -zxvf myhome.tar.gz -C /opt/
+	
+	groupadd police
+	useradd -g police tom
+	passwd tom
+	su tom
+	
+	touch apple.txt
+	chown tom apple.txt
+	chown tom:police apple.txt
+	
+	root:
+		touch /home/zhangsan/test/apple.txt
+		ls -lh /home/zhangsan/test/
+		chown fansan /home/zhangsan/test/apple.txt
+		id fansan
+		chown fansan:dev /home/zhangsan/test/apple.txt
+		
+	usermod -g 组名 用户名
+	
+	chown newown  file
+	chown newown:newgroup file
+	chown -R newown file
+	chown -R newown:newgroup file
+	
+	 police ， bandit
+	 jack, jerry: 警察
+	 xh, xq: 土匪
+	(1) 创建组
+	(2) 创建用户
+	(3) jack 创建一个文件，自己可以读写，本组人可以读，其它组没人任何权限
+	(4) jack 修改该文件，让其它组人可以读, 本组人可以读写
+	(5) xh 投靠 警察，看看是否可以读写
+	
+	
+	groupadd police
+	groupadd bandit
+	useradd -g police jack
+	useradd -g police jerry
+	useradd -g bandit xh
+	useradd -g bandit xq
+	
+	su jack
+	touch hello.txt
+	chmod 640 hello.txt
+	chmod 664 hello.txt
+	usermod -g police xh
+	
+	fdisk /dev/sda1   -- 修改磁盘
+	磁盘命令:
+	df -h   df -l  df -lh
+	du -h /目录    du -h /root
+	
+	du -ach --max-depth=1 /opt
+	
+	1)统计home文件夹下文件的个数：
+		ls -l /home | grep "-^" | wc -l
+		
+	2)统计home文件夹下目录的个数:
+		ls -l /home | grep "^d" | wc -l 
+		
+	3)统计home文件夹下文件的个数，包括子文件夹里面的:
+		ls -lR /home | grep "-^" | wc -l
+	
+	4)统计home文件夹下目录的个数,包括子文件夹里面的:
+		ls -lR /home | grep "^d" | wc -l
+		
+	5)以树状显示目录结构:
+		yum install tree
+		进入需要显示的目录中:
+		cd /home
+		tree
+		
+	/etc/sysconfig/network-scripts/ifcfg-eth0
+	
+	IPADDR=192.168.66.129
+	NETMASK=255.255.255.0
+	GATEWAY=192.168.66.2
+	DNS1=192.168.66.2
+	
+	BOOTPROTO=static
+	ONBOOT=yes
+	
+	service network restart
+	
+	进程：
+	ps -a
+	ps -u
+	ps -x
+	
+	ps -aux | more
+	ps -aux | grep mysql
+	ps -ef | grep sshd
+	
+	kill 进程号
+	kill all 进程名称
+	kill -9 ... 强制停止
+	
+	1)踢掉某个非法登陆用户(fansan) 
+		ps -aux | grep sshd  (找到进程号，如1111)
+		kill 1111  /  kill -9 1111
+	2)终止远程登录服务sshd，在适当时候再次重启sshd服务
+	
+	3)终止对个gedit编辑器
+		killall gedit
+		
+	4)强制杀掉一个终端
+		ps -aux | grep bash
+		kill -9 终端号
+		
+	服务:
+		service 服务名 start 
+					   stop
+					   restart
+					   reload
+					   status
+		
+		service mysql status
+		
+	永久生效:
+		ls -l /etc/init.d/
+		systemctl list-unit-files
+		chkconfig --list|grep ***
+		chkconfig 服务名  --list
+		chkconfig --level 5 服务名 on/off
+		
+		top   --- 动态进程
+		
+	rpm -qa | grep firefox
+	rpm -qa | more
+	rpm -qa
+	rpm -qa | grep X  [rpm -qa | grep firefox]
+	rpm -q firefox
+	rpm -qi 软件包名
+	
+	rpm -e firefox
+
+	touch cut.txt
+	vim cut.txt
+	cut -d " " -f 1 cut.txt
+	cut -d " " -f 2,3 cut.txt
+	cat cut.txt | grep "guan" | -d " " -f 1
+	echo $PATH
+	cut -d: -f 2-
+	
+	
+	
