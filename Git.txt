@@ -1,0 +1,253 @@
+将本地代码推送到github网站示例：
+1、github
+	账号密码： 15388657853@163.com     zc&123456
+	
+2、本地git客户端
+	name : fansan   email : 15388657853@163.com
+	查看Git的配置信息：git config --list
+	
+3、在本地的某个文件夹（项目）下： git init
+
+4、提交到暂存区：                 
+	git add .   （add .  ---> 所有的修改和新增，不包括删除）
+5、将暂存区提交到仓库 ：
+	git commit -m "提交的注释..."
+
+6、在github上创建项目获取其url，如：
+	git@github.com:coderzhangchao/Python-.git
+
+7、配置github和本地git的免密（ssh）推送：
+	a、执行命令：ssh-keygen -t rsa -C "15388657853@163.com"
+	b、将生成的文件：id_rsa.pub的内容复制到github的 SSH and GPG keys 中（title可随意取）
+	c、测试连接： ssh -T git@github.com
+
+8、给远程仓库起别名：
+	git remote add python git@github.com:coderzhangchao/Python-.git
+
+9、推送：
+	git push python master
+	
+10、拉取：
+	git pull python master
+
+查看Git的配置信息：git config --list
+
+//*************************************************************************
+
+一、Git本地安装
+Git-2.15.1.2-64-bit.exe -- 安装到一个非中文没有空格的目录下。
+安装选项：
+1、Choosing the default editor used by Git
+	建议使用VIM编辑器 ：Use Vim (...)as Gits default editor
+2、Adjusting your PATH environment
+	安全不修改PATH环境变量，仅在Git bash中使用Git  -- Use Git from Git Bash only
+3、Choosing HTTPS transport backend
+	使用默认值  Use the OpenSSL library
+4、Configuring the line ending conversions
+	行末换行符转换方式  -- Checkout Windows-style,commit Unix-style line endings
+5、Configuring the terminal emulator to use with Git Bash
+	执行Git命令的默认终端 --  Use MinTTY(...)
+6、Configuring extra options
+	Enable file system caching
+	Enable Git Credential Manager
+	
+二、Git 命令
+
+1、本地库的初始化：git init
+
+	在该命令所在的目录下生成隐藏的 .git 文件夹。
+	.git 目录中存放的是本地库相关的子目录和文件，不要删除，也不要胡乱修改。
+2、设置签名：
+	作用： 区分不同开发人员的身份；
+	辨析： 这里设置的签名和登录远程库(代码托管中心)的账号、 密码没有任何关系。
+	项目级别/仓库级别： 仅在当前本地库范围内有效：
+	
+		git config user.name tom_pro
+		git config user.email goodMorning_pro@atguigu.com
+		
+		信息保存位置： ./.git/config 文件
+	系统用户级别： 登录当前操作系统的用户范围：
+	
+		git config --global user.name tom_glb
+		git config --global goodMorning_pro@atguigu.com
+		
+		信息保存位置： ~/.gitconfig 文件
+3、操作命令：
+
+	git status           -- 查看工作区、 暂存区状态
+	
+	git add [file name]  -- 将工作区的“新建/修改” 添加到暂存区
+	git add . --- 添加所有新增、修改
+	
+	git commit -m "commit message" [file name] --将暂存区的内容提交到本地库
+	git commit -m "提交所有的暂存区"
+	
+	查看历史记录：
+	git log  多屏显示控制方式：空格向下翻页；b 向上翻页；q 退出
+	git log --pretty=oneline
+	git log --oneline
+	git reflog
+	
+	版本前进和后退：
+	git reset --hard [局部索引值]
+		git reset --hard a6ace91
+	git reset --hard HEAD^
+		一个^表示后退一步， n 个表示后退 n 步
+	git reset --hard HEAD~n
+		注： 表示后退 n 步
+	reset 命令的三个参数对比：
+		--soft 参数   仅仅在本地库移动 HEAD 指针
+		--mixed 参数  在本地库移动 HEAD 指针；重置暂存区。
+		--hard 参数   在本地库移动 HEAD 指针；重置暂存区；重置工作区。
+		
+	删除文件后找回：
+		前提： 删除前， 文件存在时的状态提交到了本地库
+		操作： git reset --hard [指针位置]
+			删除操作已经提交到本地库： 指针位置指向历史记录；
+			删除操作尚未提交到本地库： 指针位置使用 HEAD。
+			
+	比较文件的差异：
+		git diff [文件名]
+			将工作区中的文件和暂存区进行比较。
+		git diff [本地库中历史版本] [文件名]
+			将工作区中的文件和本地库历史记录比较。
+		不带文件名比较多个文件。
+
+4、Git分支管理
+	各个分支在开发过程中， 如果某一个分支开发失败， 不会对其他分支有任
+	何影响。 失败的分支删除重新开始即可。
+	创建分支：  git branch [分支名]
+	查看分支：  git branch -v
+	切换分支：  git checkout [分支名]
+	合并分支：	例如将 dev 分支合并到 master 分支
+		切换到 master 分支 ： git checkout master
+		合并命令:             git merge dev
+	
+5、Git 和 GitHub
+
+	查看当前所有的远程库别名： git remote -v
+	
+	给远程的链接路径起别名：
+		git remote add [别名] [远程地址]
+		git remote add designModel git@github.com:coderzhangchao/DesignModelProject.git
+	
+	推送：
+		git push [别名] [分支名]
+		git push designModel master
+		需要在弹出页面中输入 git账户名和密码。
+		
+	将远程库克隆到本地库：
+		git clone [远程地址]
+			完整的把远程库下载到本地
+			创建 origin 远程地址别名
+			初始化本地库。
+			
+	团队成员邀请：（添加推送权限）
+		仓库页面点击 setting  --> Collaborators
+		输入需要加入的人的gitHub账号，点击 collaborator ---> Copy invite link
+		复制邀请的 链接 发送给邀请成员
+		邀请成员在自己的GitHub 页面访问 该链接。
+		
+	拉取远程库的东西：
+		pull = fetch + merge
+		git fetch [远程库地址别名] [远程分支名]
+		git merge [远程库地址别名/远程分支名]
+		git pull [远程库地址别名] [远程分支名]
+		
+	跨团队协作（远程库之间的 同步）
+		1、登陆进入自己的GitHub
+		2、访问 需要拷贝的gitHub项目地址：https://github.com/je-ge/spring-boot
+		3、点击 Fork 即可将项目拷贝到自己的 gitHub中；
+		4、然后 clone 到本地 --> 修改、git add、git commit、push
+		5、GitHub中点击 Pull request --> New pull request --> Create pull request
+		   填写备注信息 --> Create pull request。
+		6、项目的所有者登陆后 点击 pull request
+		7、审核代码（查看他们的操作）
+		8、Merge pull request -- Confirm merge 合并代码。
+		
+	SSH免密登陆:
+		针对 https 的远程链接，每次推送都必须 输入 账号和密码。
+		SSH类型：
+		进入当前用户的家目录：$ cd ~
+		删除.ssh 目录：       $ rm -rvf .ssh
+		运行命令生成.ssh 密钥目录：$ ssh-keygen -t rsa -C atguigu2018ybuq@aliyun.com
+		进入.ssh 目录查看文件列表：id_rsa ； id_rsa.pub
+		打开id_rsa.pub，复制内容
+		进入GitHub页面的 settings --> SSH and GPG keys --> New SSH key
+		title 随意填写，key bub文件的复制内容 -- Add SSH key
+		
+6、集成Eclipse
+	1、Eclipse 创建的普通 war 项目添加 web.xml:
+		项目上右键 --> Java EE Tools --> Generate Deployment Descriptor Stub
+	2、工程初始化为本地库
+		工程→右键→Team→Share Project→Git  选中相关框框
+	3、Eclipse 中忽略文件
+		这些都是 Eclipse 为了管理我们创建的工程而维护的文件，和开发的代码没有
+		直接关系。最好不要在 Git 中进行追踪，也就是把它们忽略。
+		.classpath 文件
+		.project 文件
+		.settings 目录下所有文件。
+		target  -- 编译文件夹
+		为什么要忽略 Eclipse 特定文件呢？
+		同一个团队中很难保证大家使用相同的 IDE 工具， 而 IDE 工具不同时，相关工
+		程特定文件就有可能不同。如果这些文件加入版本控制，那么开发时很可能需要为
+		了这些文件解决冲突。
+		GitHub 官网样例文件：
+		https://github.com/github.gitignore
+		https://github.com/github.gitignore/blog/master/Java.gitignore
+		在~/.gitconfig 文件中引入上述文件:
+		[core]
+			excludesfile = C:/Users/Lenovo/Java.gitignore
+		[注意： 这里路径中一定要使用“/” ， 不能使用“\” ]
+	4、推送到远程库：
+		GitHub上必须有远程库
+		Team --> Remote --> Push --> 填入URI(https)、User、Password、勾选Store in Secure Store
+		---> 点击 Add All Branches Spec --> Finish
+	5、将远程库克隆到本地 -- Oxygen(版本) Eclipse 克隆工程操作
+		1、Import...导入工程；
+		2、Clone URI;
+		3、到远程库复制工程地址；
+		4、指定工程的保存位置；
+			Directory : Eclipse的工作空间目录
+			指定工程导入方式， 这里只能用： Import as general project。
+		5、转换工程类型：
+			Configure -- > Convert to Maven Project
+	6、Kepler Eclipse 克隆工程操作：
+		问题： 不能保存到当前 Eclipse 工作区目录；
+		正确做法： 保存到工作区以外的目录中。
+		
+7、常用分支：
+	主干分支 master  -- 开发分支 develop -- bug 修理分支 hotfix -- 功能分支 feature
+	
+8、Gitlab 服务器搭建过程 <略>
+	1、下载 gitlab 的rpm文件：
+		https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/7/gitlab-ce-10.8.2-ce.0.el7.x86_64.rpm
+		
+java.gitignore	
+# Compiled class file
+*.class
+# Log file
+*.log
+# BlueJ files
+*.ctxt
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+# Eclipse file
+.classpath
+.project
+.settings
+target
+		
+		
+		
+		
